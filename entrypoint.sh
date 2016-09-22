@@ -1,10 +1,10 @@
 #!/bin/sh
 
-# Output logs to stdout.
-echo "Redirecting logs to stdout..."
-mkdir -p '/config/logs'
-touch '/config/main.log'
-tail -f '/config/main.log' &
+# Copy default settings.json if not present
+if [ ! -f /config/settings.json ]; then
+    echo "Copy default settings.json to /config"
+    cp /settings.json /config/
+fi
 
 echo "Starting tramission-daemon..."
 exec "$@"

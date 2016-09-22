@@ -12,12 +12,6 @@ RUN apt-get update && \
     apt-get install -y \
         transmission-daemon
 
-# Create config folder
-RUN mkdir /config
-
-# Apply ownership
-RUN chown transmission:transmission /config
-
 USER transmission
 
 # Ports and volumes
@@ -25,7 +19,7 @@ EXPOSE 9091
 VOLUME ["/config", "/downloads"]
 
 # Entrypoint
-COPY ./entrypoint.sh /
+COPY ./entrypoint.sh transmission/settings.json /
 WORKDIR /var/lib/transmission-daemon
-ENTRYPOINT ["/bin/sh", "/entrypoint.sh"]
-CMD /usr/bin/transmission-daemon --config-dir $HOME --logfile $HOME/main.log
+ENTRYPOINT ["/entrypoint.sh"]
+CMD /usr/bin/transmission-daemon -f --config-dir $HOME --logfile $HOME/main.log
